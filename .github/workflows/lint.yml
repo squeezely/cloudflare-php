@@ -18,12 +18,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - uses: shivammathur/setup-php@v3
+    - uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php-versions }}
 
     - name: Cache Composer dependencies
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: /tmp/composer-cache
         key: ${{ runner.os }}-php${{ matrix.php-versions }}-${{ hashFiles('**/composer.lock') }}
