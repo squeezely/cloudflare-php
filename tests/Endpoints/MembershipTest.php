@@ -1,16 +1,13 @@
 <?php
 
 
-use Cloudflare\API\Adapter\Adapter;
-use Cloudflare\API\Endpoints\Membership;
-
 class MembershipTest extends TestCase
 {
     public function testListMemberships()
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/listMemberships.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->createMock(\Cloudflare\API\Adapter\Adapter::class);
         $mock->method('get')->willReturn($response);
 
         $mock->expects($this->once())
@@ -27,7 +24,7 @@ class MembershipTest extends TestCase
                 ])
             );
 
-        $zones = new Membership($mock);
+        $zones = new \Cloudflare\API\Endpoints\Membership($mock);
         $result = $zones->listMemberships('Demo Account', 'accepted', 1, 20, 'status', 'desc');
 
         $this->assertObjectHasProperty('result', $result);
@@ -42,10 +39,10 @@ class MembershipTest extends TestCase
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/getMembershipDetails.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->createMock(\Cloudflare\API\Adapter\Adapter::class);
         $mock->method('get')->willReturn($response);
 
-        $membership = new Membership($mock);
+        $membership = new \Cloudflare\API\Endpoints\Membership($mock);
         $details = $membership->getMembershipDetails('4536bcfad5faccb111b47003c79917fa');
 
         $this->assertObjectHasProperty('id', $details);
@@ -59,7 +56,7 @@ class MembershipTest extends TestCase
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/updateMembershipStatus.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->createMock(\Cloudflare\API\Adapter\Adapter::class);
         $mock->method('put')->willReturn($response);
 
         $mock->expects($this->once())
@@ -71,7 +68,7 @@ class MembershipTest extends TestCase
                 ])
             );
 
-        $membership = new Membership($mock);
+        $membership = new \Cloudflare\API\Endpoints\Membership($mock);
         $membership->updateMembershipStatus('4536bcfad5faccb111b47003c79917fa', 'accepted');
         $this->assertEquals('4536bcfad5faccb111b47003c79917fa', $membership->getBody()->result->id);
     }
@@ -80,14 +77,14 @@ class MembershipTest extends TestCase
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/deleteMembership.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->createMock(\Cloudflare\API\Adapter\Adapter::class);
         $mock->method('delete')->willReturn($response);
 
         $mock->expects($this->once())
             ->method('delete')
             ->with($this->equalTo('memberships/4536bcfad5faccb111b47003c79917fa'));
 
-        $membership = new Membership($mock);
+        $membership = new \Cloudflare\API\Endpoints\Membership($mock);
 
         $membership->deleteMembership('4536bcfad5faccb111b47003c79917fa');
 

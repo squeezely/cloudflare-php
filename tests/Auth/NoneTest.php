@@ -1,7 +1,4 @@
 <?php
-
-use Cloudflare\API\Auth\None;
-
 /**
  * Created by PhpStorm.
  * User: junade
@@ -13,7 +10,7 @@ class NoneTest extends TestCase
 {
     public function testGetHeaders()
     {
-        $auth    = new None();
+        $auth    = new \Cloudflare\API\Auth\None();
         $headers = $auth->getHeaders();
 
         $this->assertEquals([], $headers);

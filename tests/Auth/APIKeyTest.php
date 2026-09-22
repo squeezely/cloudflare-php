@@ -1,7 +1,5 @@
 <?php
 
-use Cloudflare\API\Auth\APIKey;
-
 /**
  * User: junade
  * Date: 13/01/2017
@@ -11,7 +9,7 @@ class APIKeyTest extends TestCase
 {
     public function testGetHeaders()
     {
-        $auth    = new APIKey('example@example.com', '1234567893feefc5f0q5000bfo0c38d90bbeb');
+        $auth    = new \Cloudflare\API\Auth\APIKey('example@example.com', '1234567893feefc5f0q5000bfo0c38d90bbeb');
         $headers = $auth->getHeaders();
 
         $this->assertArrayHasKey('X-Auth-Key', $headers);

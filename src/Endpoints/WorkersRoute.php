@@ -47,7 +47,7 @@ class WorkersRoute implements API
             'pattern' => $pattern
         ];
 
-        if($script) {
+        if ($script) {
             $options['script'] = $script;
         }
 
@@ -68,7 +68,7 @@ class WorkersRoute implements API
             'pattern' => $pattern
         ];
 
-        if($script) {
+        if ($script) {
             $options['script'] = $script;
         }
 

@@ -1,7 +1,5 @@
 <?php
 
-use Cloudflare\API\Adapter\Adapter;
-use Cloudflare\API\Configurations\Certificate;
 use Cloudflare\API\Endpoints\Certificates;
 
 class CertificatesTest extends TestCase
@@ -10,7 +8,10 @@ class CertificatesTest extends TestCase
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/listCertificates.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $authMock = $this->createMock(\Cloudflare\API\Auth\Auth::class);
+        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)
+            ->setConstructorArgs([$authMock, 'https://example.com'])
+            ->getMock();
         $mock->method('get')->willReturn($response);
 
         $mock->expects($this->once())
@@ -42,7 +43,10 @@ class CertificatesTest extends TestCase
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/getCertificate.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $authMock = $this->createMock(\Cloudflare\API\Auth\Auth::class);
+        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)
+            ->setConstructorArgs([$authMock, 'https://example.com'])
+            ->getMock();
         $mock->method('get')->willReturn($response);
 
         $mock->expects($this->once())
@@ -73,7 +77,10 @@ class CertificatesTest extends TestCase
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/getCertificate.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $authMock = $this->createMock(\Cloudflare\API\Auth\Auth::class);
+        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)
+            ->setConstructorArgs([$authMock, 'https://example.com'])
+            ->getMock();
         $mock->method('delete')->willReturn($response);
 
         $mock->expects($this->once())
@@ -95,15 +102,18 @@ class CertificatesTest extends TestCase
 
     public function testCreateCertificate()
     {
-        $certificate = new Certificate();
+        $certificate = new \Cloudflare\API\Configurations\Certificate();
         $certificate->setHostnames(['foo.example.com', 'bar.exapmle.com']);
-        $certificate->setRequestType(Certificate::ORIGIN_ECC);
+        $certificate->setRequestType(\Cloudflare\API\Configurations\Certificate::ORIGIN_ECC);
         $certificate->setRequestedValidity(365);
         $certificate->setCsr('some-csr-data-barbar');
 
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/getCertificate.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $authMock = $this->createMock(\Cloudflare\API\Auth\Auth::class);
+        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)
+            ->setConstructorArgs([$authMock, 'https://example.com'])
+            ->getMock();
         $mock->method('post')->willReturn($response);
 
         $mock->expects($this->once())
