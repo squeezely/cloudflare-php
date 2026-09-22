@@ -1,9 +1,4 @@
 <?php
-
-use Cloudflare\API\Adapter\Adapter;
-use Cloudflare\API\Configurations\UARules as UARulesConfiguration;
-use Cloudflare\API\Endpoints\UARules;
-
 /**
  * Created by PhpStorm.
  * User: junade
@@ -17,7 +12,7 @@ class UARulesTest extends TestCase
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/listRules.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->createMock(\Cloudflare\API\Adapter\Adapter::class);
         $mock->method('get')->willReturn($response);
 
         $mock->expects($this->once())
@@ -30,7 +25,7 @@ class UARulesTest extends TestCase
                 ])
             );
 
-        $zones = new UARules($mock);
+        $zones = new \Cloudflare\API\Endpoints\UARules($mock);
         $result = $zones->listRules('023e105f4ecef8ad9ca31a8372d0c353');
 
         $this->assertObjectHasProperty('result', $result);
@@ -43,12 +38,12 @@ class UARulesTest extends TestCase
 
     public function testCreateRule()
     {
-        $config = new UARulesConfiguration();
+        $config = new \Cloudflare\API\Configurations\UARules();
         $config->addUA('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/603.2.4 (KHTML, like Gecko) Version/10.1.1 Safari/603.2.4');
 
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/createRule.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->createMock(\Cloudflare\API\Adapter\Adapter::class);
         $mock->method('post')->willReturn($response);
 
         $mock->expects($this->once())
@@ -63,7 +58,7 @@ class UARulesTest extends TestCase
                 ])
             );
 
-        $rules = new UARules($mock);
+        $rules = new \Cloudflare\API\Endpoints\UARules($mock);
         $rules->createRule(
             '023e105f4ecef8ad9ca31a8372d0c353',
             'js_challenge',
@@ -78,7 +73,7 @@ class UARulesTest extends TestCase
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/getRuleDetails.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->createMock(\Cloudflare\API\Adapter\Adapter::class);
         $mock->method('get')->willReturn($response);
 
         $mock->expects($this->once())
@@ -87,7 +82,7 @@ class UARulesTest extends TestCase
                 $this->equalTo('zones/023e105f4ecef8ad9ca31a8372d0c353/firewall/ua_rules/372e67954025e0ba6aaa6d586b9e0b59')
             );
 
-        $lockdown = new UARules($mock);
+        $lockdown = new \Cloudflare\API\Endpoints\UARules($mock);
         $result = $lockdown->getRuleDetails('023e105f4ecef8ad9ca31a8372d0c353', '372e67954025e0ba6aaa6d586b9e0b59');
 
         $this->assertEquals('372e67954025e0ba6aaa6d586b9e0b59', $result->id);
@@ -96,12 +91,12 @@ class UARulesTest extends TestCase
 
     public function testUpdateRule()
     {
-        $config = new UARulesConfiguration();
+        $config = new \Cloudflare\API\Configurations\UARules();
         $config->addUA('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/603.2.4 (KHTML, like Gecko) Version/10.1.1 Safari/603.2.4');
 
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/updateRule.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->createMock(\Cloudflare\API\Adapter\Adapter::class);
         $mock->method('put')->willReturn($response);
 
         $mock->expects($this->once())
@@ -116,7 +111,7 @@ class UARulesTest extends TestCase
                 ])
             );
 
-        $rules = new UARules($mock);
+        $rules = new \Cloudflare\API\Endpoints\UARules($mock);
         $rules->updateRule(
             '023e105f4ecef8ad9ca31a8372d0c353',
             '372e67954025e0ba6aaa6d586b9e0b59',
@@ -131,7 +126,7 @@ class UARulesTest extends TestCase
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/deleteRule.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->createMock(\Cloudflare\API\Adapter\Adapter::class);
         $mock->method('delete')->willReturn($response);
 
         $mock->expects($this->once())
@@ -140,7 +135,7 @@ class UARulesTest extends TestCase
                 $this->equalTo('zones/023e105f4ecef8ad9ca31a8372d0c353/firewall/ua_rules/372e67954025e0ba6aaa6d586b9e0b59')
             );
 
-        $rules = new UARules($mock);
+        $rules = new \Cloudflare\API\Endpoints\UARules($mock);
         $rules->deleteRule('023e105f4ecef8ad9ca31a8372d0c353', '372e67954025e0ba6aaa6d586b9e0b59');
         $this->assertEquals('372e67954025e0ba6aaa6d586b9e0b59', $rules->getBody()->result->id);
     }

@@ -11,10 +11,12 @@ use Cloudflare\API\Configurations\Pool;
 class PoolTest extends TestCase
 {
     /**
-     * @dataProvider dataProviderTestArguments
+     * @dataProvider argumentsDataProvider
      */
     public function testArguments($setFunction, $arguments, $getFunction, $invalid)
     {
+        $this->assertNotEmpty($arguments, 'Arguments should not be empty.');
+        
         $pool = new Pool('bogus', []);
         foreach ($arguments as $argument) {
             if ($invalid) {
@@ -30,7 +32,7 @@ class PoolTest extends TestCase
         }
     }
 
-    public function dataProviderTestArguments()
+    public function argumentsDataProvider()
     {
         return [
             'origins arguments valid' => [

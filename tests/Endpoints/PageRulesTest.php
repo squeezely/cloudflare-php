@@ -1,10 +1,4 @@
 <?php
-
-use Cloudflare\API\Adapter\Adapter;
-use Cloudflare\API\Configurations\PageRulesActions;
-use Cloudflare\API\Configurations\PageRulesTargets;
-use Cloudflare\API\Endpoints\PageRules;
-
 /**
  * Created by PhpStorm.
  * User: junade
@@ -16,13 +10,13 @@ class PageRulesTest extends TestCase
 {
     public function testCreatePageRule()
     {
-        $target = new PageRulesTargets('*example.com/images/*');
-        $action = new PageRulesActions();
+        $target = new \Cloudflare\API\Configurations\PageRulesTargets('*example.com/images/*');
+        $action = new \Cloudflare\API\Configurations\PageRulesActions();
         $action->setAlwaysOnline(true);
 
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/createPageRule.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->createMock(\Cloudflare\API\Adapter\Adapter::class);
         $mock->method('post')->willReturn($response);
 
         $mock->expects($this->once())
@@ -37,7 +31,7 @@ class PageRulesTest extends TestCase
                 ])
             );
 
-        $pageRules = new PageRules($mock);
+        $pageRules = new \Cloudflare\API\Endpoints\PageRules($mock);
         $result = $pageRules->createPageRule('023e105f4ecef8ad9ca31a8372d0c353', $target, $action, true, 1);
 
         $this->assertTrue($result);
@@ -48,7 +42,7 @@ class PageRulesTest extends TestCase
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/listPageRules.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->createMock(\Cloudflare\API\Adapter\Adapter::class);
         $mock->method('get')->willReturn($response);
 
         $mock->expects($this->once())
@@ -63,7 +57,7 @@ class PageRulesTest extends TestCase
               ])
             );
 
-        $pageRules = new PageRules($mock);
+        $pageRules = new \Cloudflare\API\Endpoints\PageRules($mock);
         $pageRules->listPageRules('023e105f4ecef8ad9ca31a8372d0c353', 'active', 'status', 'desc', 'all');
         $this->assertEquals('9a7806061c88ada191ed06f989cc3dac', $pageRules->getBody()->result[0]->id);
     }
@@ -72,7 +66,7 @@ class PageRulesTest extends TestCase
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/getPageRuleDetails.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->createMock(\Cloudflare\API\Adapter\Adapter::class);
         $mock->method('get')->willReturn($response);
 
         $mock->expects($this->once())
@@ -81,20 +75,20 @@ class PageRulesTest extends TestCase
                 $this->equalTo('zones/023e105f4ecef8ad9ca31a8372d0c353/pagerules/9a7806061c88ada191ed06f989cc3dac')
             );
 
-        $pageRules = new PageRules($mock);
+        $pageRules = new \Cloudflare\API\Endpoints\PageRules($mock);
         $pageRules->getPageRuleDetails('023e105f4ecef8ad9ca31a8372d0c353', '9a7806061c88ada191ed06f989cc3dac');
         $this->assertEquals('9a7806061c88ada191ed06f989cc3dac', $pageRules->getBody()->result->id);
     }
 
     public function testUpdatePageRule()
     {
-        $target = new PageRulesTargets('*example.com/images/*');
-        $action = new PageRulesActions();
+        $target = new \Cloudflare\API\Configurations\PageRulesTargets('*example.com/images/*');
+        $action = new \Cloudflare\API\Configurations\PageRulesActions();
         $action->setAlwaysOnline(true);
 
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/updatePageRule.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->createMock(\Cloudflare\API\Adapter\Adapter::class);
         $mock->method('patch')->willReturn($response);
 
         $mock->expects($this->once())
@@ -109,7 +103,7 @@ class PageRulesTest extends TestCase
                 ])
             );
 
-        $pageRules = new PageRules($mock);
+        $pageRules = new \Cloudflare\API\Endpoints\PageRules($mock);
         $result = $pageRules->updatePageRule('023e105f4ecef8ad9ca31a8372d0c353', '9a7806061c88ada191ed06f989cc3dac', $target, $action, true, 1);
 
         $this->assertTrue($result);
@@ -120,7 +114,7 @@ class PageRulesTest extends TestCase
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/deletePageRule.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->createMock(\Cloudflare\API\Adapter\Adapter::class);
         $mock->method('delete')->willReturn($response);
 
         $mock->expects($this->once())
@@ -129,7 +123,7 @@ class PageRulesTest extends TestCase
                 $this->equalTo('zones/023e105f4ecef8ad9ca31a8372d0c353/pagerules/9a7806061c88ada191ed06f989cc3dac')
             );
 
-        $pageRules = new PageRules($mock);
+        $pageRules = new \Cloudflare\API\Endpoints\PageRules($mock);
         $result = $pageRules->deletePageRule('023e105f4ecef8ad9ca31a8372d0c353', '9a7806061c88ada191ed06f989cc3dac');
 
         $this->assertTrue($result);

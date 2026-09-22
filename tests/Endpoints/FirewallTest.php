@@ -1,16 +1,12 @@
 <?php
 
-use Cloudflare\API\Adapter\Adapter;
-use Cloudflare\API\Configurations\FirewallRuleOptions;
-use Cloudflare\API\Endpoints\Firewall;
-
 class FirewallTest extends TestCase
 {
     public function testCreatePageRules()
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/createFirewallRules.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->createMock(\Cloudflare\API\Adapter\Adapter::class);
         $mock->method('post')->willReturn($response);
 
         $mock->expects($this->once())
@@ -37,7 +33,7 @@ class FirewallTest extends TestCase
                 ])
             );
 
-        $firewall = new Firewall($mock);
+        $firewall = new Cloudflare\API\Endpoints\Firewall($mock);
         $result = $firewall->createFirewallRules(
             '023e105f4ecef8ad9ca31a8372d0c353',
             [
@@ -66,7 +62,7 @@ class FirewallTest extends TestCase
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/createFirewallRule.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->createMock(\Cloudflare\API\Adapter\Adapter::class);
         $mock->method('post')->willReturn($response);
 
         $mock->expects($this->once())
@@ -86,8 +82,8 @@ class FirewallTest extends TestCase
                 ])
             );
 
-        $firewall = new Firewall($mock);
-        $options = new FirewallRuleOptions();
+        $firewall = new Cloudflare\API\Endpoints\Firewall($mock);
+        $options = new \Cloudflare\API\Configurations\FirewallRuleOptions();
         $options->setActionBlock();
         $result = $firewall->createFirewallRule(
             '023e105f4ecef8ad9ca31a8372d0c353',
@@ -102,7 +98,7 @@ class FirewallTest extends TestCase
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/listFirewallRules.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->createMock(\Cloudflare\API\Adapter\Adapter::class);
         $mock->method('get')->willReturn($response);
 
         $mock->expects($this->once())
@@ -115,7 +111,7 @@ class FirewallTest extends TestCase
                 ])
             );
 
-        $firewall = new Firewall($mock);
+        $firewall = new Cloudflare\API\Endpoints\Firewall($mock);
         $result = $firewall->listFirewallRules('023e105f4ecef8ad9ca31a8372d0c353');
 
         $this->assertObjectHasProperty('result', $result);
@@ -128,7 +124,7 @@ class FirewallTest extends TestCase
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/deleteFirewallRule.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->createMock(\Cloudflare\API\Adapter\Adapter::class);
         $mock->method('delete')->willReturn($response);
 
         $mock->expects($this->once())
@@ -137,7 +133,7 @@ class FirewallTest extends TestCase
                 $this->equalTo('zones/023e105f4ecef8ad9ca31a8372d0c353/firewall/rules/970b10321e3f4adda674c912b5f76591')
             );
 
-        $firewall = new Firewall($mock);
+        $firewall = new Cloudflare\API\Endpoints\Firewall($mock);
         $firewall->deleteFirewallRule('023e105f4ecef8ad9ca31a8372d0c353', '970b10321e3f4adda674c912b5f76591');
     }
 
@@ -145,7 +141,7 @@ class FirewallTest extends TestCase
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/updateFirewallRule.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->createMock(\Cloudflare\API\Adapter\Adapter::class);
         $mock->method('put')->willReturn($response);
 
         $mock->expects($this->once())
@@ -165,8 +161,8 @@ class FirewallTest extends TestCase
                 ])
             );
 
-        $firewall = new Firewall($mock);
-        $options = new FirewallRuleOptions();
+        $firewall = new Cloudflare\API\Endpoints\Firewall($mock);
+        $options = new \Cloudflare\API\Configurations\FirewallRuleOptions();
         $options->setActionBlock();
         $result = $firewall->updateFirewallRule(
             '023e105f4ecef8ad9ca31a8372d0c353',

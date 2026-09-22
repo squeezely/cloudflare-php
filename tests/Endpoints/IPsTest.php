@@ -1,8 +1,4 @@
 <?php
-
-use Cloudflare\API\Adapter\Adapter;
-use Cloudflare\API\Endpoints\IPs;
-
 /**
  * Created by PhpStorm.
  * User: junade
@@ -16,7 +12,7 @@ class IPsTest extends TestCase
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/listIPs.json');
 
-        $mock = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
+        $mock = $this->createMock(\Cloudflare\API\Adapter\Adapter::class);
         $mock->method('get')->willReturn($response);
 
         $mock->expects($this->once())
@@ -25,7 +21,7 @@ class IPsTest extends TestCase
                 $this->equalTo('ips')
             );
 
-        $ipsMock = new IPs($mock);
+        $ipsMock = new \Cloudflare\API\Endpoints\IPs($mock);
         $ips = $ipsMock->listIPs();
         $this->assertObjectHasProperty('ipv4_cidrs', $ips);
         $this->assertObjectHasProperty('ipv6_cidrs', $ips);
