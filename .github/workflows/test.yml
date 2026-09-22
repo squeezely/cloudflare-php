@@ -34,7 +34,7 @@ jobs:
       env:
         COMPOSER_PREFER_LOWEST: ${{ matrix.lowest }}
       with:
-        command: install
+        command: update
         args: --prefer-dist --no-progress --verbose
         php_version: ${{ matrix.php-versions }}
 
